@@ -48,9 +48,15 @@ class SugarscapeAgent(Agent):
         self.model.schedule.add(replacement)
 
     def _visible_neighbor_with_most_sugar(self):
+
+        hood = [ n for n in self.model.grid.iter_neighborhood(self.pos,
+                moore=False, include_center=False, radius=self.vision) ]
+
+        # To avoid directionality drift.
+        np.random.shuffle(hood)
+
         nei = { n:self.model.scape[n][0] 
-            for n in self.model.grid.iter_neighborhood(self.pos,
-                moore=False, include_center=False, radius=self.vision) 
+            for n in hood
             if (n[0] == self.pos[0] or n[1] == self.pos[1]) 
                 and self.model.grid.is_cell_empty(n) }
         if len(nei) == 0:
