@@ -27,11 +27,11 @@ def compute_gini(model):
 
 class Sugarscape(Model):
 
-    def __init__(self, N, agent_class, scape_filename):
+    def __init__(self, N, agent_class, raw_scape_array):
         self.num_agents = N
         self.schedule = RandomActivation(self)
         self.num_steps = 0
-        self.scape = self._load_scape(scape_filename)
+        self.scape = self._load_scape(raw_scape_array)
         self.width = self.scape.shape[0]
         self.height = self.scape.shape[1]
         self.grid = SingleGrid(self.width, self.height, False)
@@ -40,18 +40,19 @@ class Sugarscape(Model):
             self.schedule.add(a)
         self.running = True   # could set this to stop prematurely
 
-    def _load_scape(self, scape_filename):
+    def _load_scape(self, raw_scape_array):
         """
-        A scape file is a .csv file with integers representing the max
-        sugar capacity of each sugarscape cell.
+        The raw_scape_array should be a NumPy array of ints, each element
+        representing the initial, and max capacity, of a sugarscape cell.
         """
-        scape = np.empty((10,10),dtype=EnvSquare)
-        for row in range(10):
-            for col in range(10):
-                curr = np.random.choice(range(5))
-                the_max = curr + np.random.choice(range(5))
-                scape[row][col] = EnvSquare(curr,the_max)
+        scape = np.empty(raw_scape_array.shape,dtype=EnvSquare)
+        for row in range(scape.shape[0]):
+            for col in range(scape.shape[1]):
+                scape[row][col] = EnvSquare(raw_scape_array[row,col],
+                    raw_scape_array[row,col])
+        print(scape.shape)
         return scape
+
 
     def step(self):
         self.num_steps += 1
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     if sys.argv[1] == "single":
 
         # Single simulation run.
-        m = Sugarscape(10, SugarscapeAgent, "fake.csv")
+        m = Sugarscape(10, SugarscapeAgent, "50x50.csv")
         m.run(5)
 
     else:

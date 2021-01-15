@@ -45,14 +45,21 @@ class SugarscapeGrid(CanvasGrid):
         return hex((255 - (i * 50) % 255))[2:].zfill(2)
 
 if __name__ == "__main__":
+
     N = 10
 
-    # The width and height should really be read from the scape_file.
-    grid = SugarscapeGrid(agent_portrayal, 10, 10, 500, 500)
+    """
+    A scape file is a .csv file with integers representing the max sugar
+    capacity of each sugarscape cell.
+    """
+    raw_scape_array = np.loadtxt("50x50.csv",delimiter=",",dtype=int)
+
+    grid = SugarscapeGrid(agent_portrayal, raw_scape_array.shape[0],
+        raw_scape_array.shape[1], 500, 500)
 
     server = ModularServer(Sugarscape, [grid],
         "Sugarscape",
-        { "N":N, "scape_filename":"fake.csv",
+        { "N":N, "raw_scape_array":raw_scape_array,
         "agent_class":SugarscapeAgent })
     server.port = 8081
     server.launch()
