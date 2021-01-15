@@ -72,7 +72,10 @@ if __name__ == "__main__":
     population = ChartModule([{"Label":"Population", "Color":"Black"}],
         data_collector_name="datacollector")
 
-    server = ModularServer(Sugarscape, [grid, population],
+    mean_metabolism = ChartModule([{"Label":"Mean metabolism",
+        "Color":"Red"}], data_collector_name="datacollector")
+
+    server = ModularServer(Sugarscape, [grid, mean_metabolism, population],
         "Sugarscape",
         { "N":N, "raw_scape_array":raw_scape_array,
         "agent_class":SugarscapeAgent,

@@ -45,8 +45,10 @@ class Sugarscape(Model):
 
         self.datacollector = DataCollector(
             agent_reporters={},
-            model_reporters={"Population": lambda model:
-                len(model.schedule.agents) })
+            model_reporters={
+                "Population": lambda model: len(model.schedule.agents),
+                "Mean metabolism": lambda model: 
+                    np.mean([ a.metabolism for a in model.schedule.agents ])})
 
     def _load_scape(self, raw_scape_array):
         """
