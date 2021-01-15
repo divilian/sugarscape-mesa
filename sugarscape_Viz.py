@@ -46,8 +46,6 @@ class SugarscapeGrid(CanvasGrid):
 
 if __name__ == "__main__":
 
-    N = 10
-
     """
     A scape file is a .csv file with integers representing the max sugar
     capacity of each sugarscape cell.
@@ -58,12 +56,17 @@ if __name__ == "__main__":
     # way the rows appear in the file.
     raw_scape_array = np.flipud(raw_scape_array)
 
+    growback_rate = UserSettableParameter("slider","Growback rate (&alpha;)",0,0,10,1)
+
+    N = UserSettableParameter("slider","N",100,1,500,1)
+
     grid = SugarscapeGrid(agent_portrayal, raw_scape_array.shape[0],
         raw_scape_array.shape[1], 500, 500)
 
     server = ModularServer(Sugarscape, [grid],
         "Sugarscape",
         { "N":N, "raw_scape_array":raw_scape_array,
-        "agent_class":SugarscapeAgent })
+        "agent_class":SugarscapeAgent,
+        "growback_rate":growback_rate })
     server.port = 8081
     server.launch()
