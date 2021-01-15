@@ -19,11 +19,17 @@ class SugarscapeAgent(Agent):
 
     def step(self):
         logging.info("Running agent {}...".format(self.unique_id))
+
+        # Agent movement rule M (p.25)
         dest = self._visible_neighbor_with_most_sugar()
         logging.info("Move from {} to {}".format(self.pos, dest))
         self.model.grid.move_agent(self, dest)
         self.sugar += self.model.scape[dest].curr
         self.model.scape[dest] = EnvSquare(0, self.model.scape[dest].max)
+        self.sugar -= self.metabolism
+        if self.sugar < 0:
+            logging.info("{} died!".format(self))
+            self.model.schedule.remove(self)
 
     def _visible_neighbor_with_most_sugar(self):
         nei = { n:self.model.scape[n][0] 
