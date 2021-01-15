@@ -69,7 +69,10 @@ if __name__ == "__main__":
     grid = SugarscapeGrid(agent_portrayal, raw_scape_array.shape[0],
         raw_scape_array.shape[1], 500, 500)
 
-    server = ModularServer(Sugarscape, [grid],
+    population = ChartModule([{"Label":"Population", "Color":"Black"}],
+        data_collector_name="datacollector")
+
+    server = ModularServer(Sugarscape, [grid, population],
         "Sugarscape",
         { "N":N, "raw_scape_array":raw_scape_array,
         "agent_class":SugarscapeAgent,

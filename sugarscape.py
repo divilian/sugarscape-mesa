@@ -24,7 +24,6 @@ def compute_gini(model):
     B = sum(wi * (N-i) for i,wi in enumerate(w)) / (N*sum(w))
     return (1 + (1/N) - 2*B)
 
-
 class Sugarscape(Model):
 
     def __init__(self, N, agent_class, raw_scape_array, growback_rate=np.Inf,
@@ -44,6 +43,11 @@ class Sugarscape(Model):
             self.schedule.add(a)
         self.running = True   # could set this to stop prematurely
 
+        self.datacollector = DataCollector(
+            agent_reporters={},
+            model_reporters={"Population": lambda model:
+                len(model.schedule.agents) })
+
     def _load_scape(self, raw_scape_array):
         """
         The raw_scape_array should be a NumPy array of ints, each element
@@ -61,7 +65,7 @@ class Sugarscape(Model):
     def step(self):
         self.num_steps += 1
         logging.info("Iteration {}...".format(self.num_steps))
-        #self.datacollector.collect(self)
+        self.datacollector.collect(self)
         self.schedule.step()
 
         # Replacement rule G_alpha (p.23)
