@@ -10,11 +10,16 @@ EnvSquare = namedtuple('EnvSquare', 'curr max')
 
 class SugarscapeAgent(Agent):
 
+    max_id = 0
+
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        SugarscapeAgent.max_id = max(SugarscapeAgent.max_id, unique_id)
         self.vision = np.random.choice(range(1,7))
         self.metabolism = np.random.choice(range(1,5))
-        self.sugar = 10 
+        self.max_age = np.random.choice(range(60,100))
+        self.age = 0
+        self.sugar = np.random.choice(range(5,25))
         model.grid.position_agent(self)
 
     def step(self):
@@ -27,9 +32,16 @@ class SugarscapeAgent(Agent):
         self.sugar += self.model.scape[dest].curr
         self.model.scape[dest] = EnvSquare(0, self.model.scape[dest].max)
         self.sugar -= self.metabolism
-        if self.sugar < 0:
-            logging.info("{} died!".format(self))
-            self.model.schedule.remove(self)
+        self.age += 1
+        if self.age > self.max_age  or  self.sugar < 0:
+            self.die()
+
+    def die(self):
+        logging.info("{} died!".format(self))
+        self.model.schedule.remove(self)
+        self.model.grid.remove_agent(self)
+        replacement = SugarscapeAgent(SugarscapeAgent.max_id + 1, self.model)
+        self.model.schedule.add(replacement)
 
     def _visible_neighbor_with_most_sugar(self):
         nei = { n:self.model.scape[n][0] 
