@@ -41,6 +41,8 @@ class SugarscapeAgent(Agent):
         logging.info("{} died!".format(self))
         self.model.schedule.remove(self)
         self.model.grid.remove_agent(self)
+
+        # Replacement rule R_a,b (p.32)
         replacement = SugarscapeAgent(SugarscapeAgent.max_id + 1, self.model)
         replacement.color = "green"
         self.model.schedule.add(replacement)
