@@ -20,6 +20,7 @@ class SugarscapeAgent(Agent):
         self.max_age = np.random.choice(range(60,100))
         self.age = 0
         self.sugar = np.random.choice(range(5,25))
+        self.color = "red"
         model.grid.position_agent(self)
 
     def step(self):
@@ -41,6 +42,7 @@ class SugarscapeAgent(Agent):
         self.model.schedule.remove(self)
         self.model.grid.remove_agent(self)
         replacement = SugarscapeAgent(SugarscapeAgent.max_id + 1, self.model)
+        replacement.color = "green"
         self.model.schedule.add(replacement)
 
     def _visible_neighbor_with_most_sugar(self):

@@ -10,7 +10,7 @@ from agent import SugarscapeAgent, EnvSquare
 
 def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
-                 "Color": "black",
+                 "Color": agent.color,
                  "Filled": "true",
                  "Layer": 1,
                  "r": min(max(0, np.log10(agent.sugar/5)), 3)}
