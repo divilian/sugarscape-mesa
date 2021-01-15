@@ -54,6 +54,10 @@ if __name__ == "__main__":
     """
     raw_scape_array = np.loadtxt("50x50.csv",delimiter=",",dtype=int)
 
+    # Justin's right: it's annoying for the plot to be "upside down" from the
+    # way the rows appear in the file.
+    raw_scape_array = np.flipud(raw_scape_array)
+
     grid = SugarscapeGrid(agent_portrayal, raw_scape_array.shape[0],
         raw_scape_array.shape[1], 500, 500)
 
