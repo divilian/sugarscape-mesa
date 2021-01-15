@@ -27,8 +27,9 @@ def compute_gini(model):
 
 class Sugarscape(Model):
 
-    def __init__(self, N, agent_class, raw_scape_array):
+    def __init__(self, N, agent_class, raw_scape_array, growback_rate=np.Inf):
         self.num_agents = N
+        self.growback_rate = growback_rate
         self.schedule = RandomActivation(self)
         self.num_steps = 0
         self.scape = self._load_scape(raw_scape_array)
@@ -59,6 +60,17 @@ class Sugarscape(Model):
         logging.info("Iteration {}...".format(self.num_steps))
         #self.datacollector.collect(self)
         self.schedule.step()
+
+        # Replacement rule G_alpha (p.23)
+        self._growback(self.growback_rate)
+
+    def _growback(self, growback_rate):
+        for row in range(self.scape.shape[0]):
+            for col in range(self.scape.shape[1]):
+                sq = self.scape[row,col]
+                if sq.curr < sq.max:
+                    self.scape[row,col] = EnvSquare(
+                        min(sq.curr + growback_rate, sq.max), sq.max)
 
     def run(self, num_steps=50):
         for _ in range(num_steps):
