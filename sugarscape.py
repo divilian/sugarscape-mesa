@@ -14,7 +14,7 @@ import subprocess
 import sys
 import glob
 
-from agent import SugarscapeAgent
+from agent import SugarscapeAgent, EnvSquare
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -45,7 +45,13 @@ class Sugarscape(Model):
         A scape file is a .csv file with integers representing the max
         sugar capacity of each sugarscape cell.
         """
-        return np.zeros((10,10))
+        scape = np.empty((10,10),dtype=EnvSquare)
+        for row in range(10):
+            for col in range(10):
+                curr = np.random.choice(range(5))
+                the_max = curr + np.random.choice(range(5))
+                scape[row][col] = EnvSquare(curr,the_max)
+        return scape
 
     def step(self):
         self.num_steps += 1
