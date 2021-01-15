@@ -61,6 +61,8 @@ if __name__ == "__main__":
     replace = UserSettableParameter("checkbox", "Replace dead agents",
         value=True)
 
+    aging = UserSettableParameter("checkbox", "Agents age", value=True)
+
     growback_rate = UserSettableParameter("slider","Growback rate (&alpha;)",0,0,10,1)
 
 
@@ -72,6 +74,7 @@ if __name__ == "__main__":
         { "N":N, "raw_scape_array":raw_scape_array,
         "agent_class":SugarscapeAgent,
         "growback_rate":growback_rate,
-        "replace":replace })
+        "replace":replace,
+        "aging":aging })
     server.port = 8081
     server.launch()

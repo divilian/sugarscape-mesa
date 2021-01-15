@@ -33,7 +33,8 @@ class SugarscapeAgent(Agent):
         self.sugar += self.model.scape[dest].curr
         self.model.scape[dest] = EnvSquare(0, self.model.scape[dest].max)
         self.sugar -= self.metabolism
-        self.age += 1
+        if self.model.aging:
+            self.age += 1
         if self.age > self.max_age  or  self.sugar < 0:
             self.die()
 
