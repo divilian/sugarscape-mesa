@@ -27,9 +27,11 @@ def compute_gini(model):
 
 class Sugarscape(Model):
 
-    def __init__(self, N, agent_class, raw_scape_array, growback_rate=np.Inf):
+    def __init__(self, N, agent_class, raw_scape_array, growback_rate=np.Inf,
+            replace=True):
         self.num_agents = N
         self.growback_rate = growback_rate
+        self.replace = replace
         self.schedule = RandomActivation(self)
         self.num_steps = 0
         self.scape = self._load_scape(raw_scape_array)

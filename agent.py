@@ -42,10 +42,12 @@ class SugarscapeAgent(Agent):
         self.model.schedule.remove(self)
         self.model.grid.remove_agent(self)
 
-        # Replacement rule R_a,b (p.32)
-        replacement = SugarscapeAgent(SugarscapeAgent.max_id + 1, self.model)
-        replacement.color = "green"
-        self.model.schedule.add(replacement)
+        if self.model.replace:
+            # Replacement rule R_a,b (p.32)
+            replacement = SugarscapeAgent(SugarscapeAgent.max_id + 1,
+                self.model)
+            replacement.color = "green"
+            self.model.schedule.add(replacement)
 
     def _visible_neighbor_with_most_sugar(self):
 
