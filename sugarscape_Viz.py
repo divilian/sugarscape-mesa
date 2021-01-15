@@ -13,7 +13,7 @@ def agent_portrayal(agent):
                  "Color": "black",
                  "Filled": "true",
                  "Layer": 1,
-                 "r": agent.sugar / 100}
+                 "r": min(max(0, np.log10(agent.sugar/5)), 3)}
     return portrayal
 
 
@@ -42,7 +42,7 @@ class SugarscapeGrid(CanvasGrid):
         return grid_state
 
     def _compute_hex_str(self, i):
-        return hex((255 - (i * 50) % 255))[2:].zfill(2)
+        return hex((255 - (i * 60) % 255))[2:].zfill(2)
 
 if __name__ == "__main__":
 
