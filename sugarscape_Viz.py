@@ -56,15 +56,26 @@ if __name__ == "__main__":
     # way the rows appear in the file.
     raw_scape_array = np.flipud(raw_scape_array)
 
-    N = UserSettableParameter("slider","N",100,1,500,1)
+    N = UserSettableParameter("slider","Number of agents (N)",100,1,500,1)
 
     replace = UserSettableParameter("checkbox", "Replace dead agents",
-        value=True)
+        value=False)
 
     aging = UserSettableParameter("checkbox", "Agents age", value=True)
 
-    growback_rate = UserSettableParameter("slider","Growback rate (&alpha;)",0,0,10,1)
+    growback_rate = UserSettableParameter("slider","Growback rate (&alpha;)",0,0,5,1)
 
+    explain = UserSettableParameter("static_text",
+        value=
+        """
+        <ul>
+        <li><span style="color:red;font-weight:bold;">Red</span> agents are the O.G.; <span
+style="color:green;font-weight:bold;">green</span> agents are replacements for when a red
+        (or green) agent died.</li>
+        <li><b>Radius</b> of agent circle is proportional to (logarithm of) its current
+sugar.<br/></li>
+        </ul>
+        """)
 
     grid = SugarscapeGrid(agent_portrayal, raw_scape_array.shape[0],
         raw_scape_array.shape[1], 500, 500)
@@ -76,11 +87,11 @@ if __name__ == "__main__":
         "Color":"Red"}], data_collector_name="datacollector")
 
     server = ModularServer(Sugarscape, [grid, mean_metabolism, population],
-        "Sugarscape",
+        "Stephenscape",
         { "N":N, "raw_scape_array":raw_scape_array,
         "agent_class":SugarscapeAgent,
         "growback_rate":growback_rate,
         "replace":replace,
-        "aging":aging })
+        "aging":aging, "explain":explain })
     server.port = 8081
     server.launch()
